@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RAAH SCENTS Shop - Browse our complete collection of luxury perfumes">
+  <title>Shop - RAAH SCENTS ✨</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .shop-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 8rem 2rem 3rem;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 3rem;
+    }
+
+    .filters-sidebar {
+      background: var(--dark2);
+      padding: 2rem;
+      border: 1px solid rgba(201, 168, 76, 0.1);
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+
+    .filter-group {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+    }
+
+    .filter-group:last-child {
+      border-bottom: none;
+    }
+
+    .filter-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .filter-option input {
+      width: 18px;
+      height: 18px;
+      margin-right: 0.8rem;
+      accent-color: var(--gold);
+      cursor: pointer;
+    }
+
+    .filter-option label {
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      flex: 1;
+    }
+
+    .filter-option label:hover {
+      color: var(--gold);
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: var(--dark);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      color: var(--cream);
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-box::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .sort-select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: var(--dark);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      color: var(--cream);
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+    }
+
+    .sort-select:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .shop-main {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shop-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+    }
+
+    .results-count {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2px;
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .no-results-emoji {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .shop-container {
+        grid-template-columns: 1fr;
+        padding-top: 6rem;
+        gap: 2rem;
+      }
+
+      .filters-sidebar {
+        position: static;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">RAAH SCENTS ✨</a>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html" class="active">Shop</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <div class="nav-contact">
+      📱 <span>+234 906 644 4873</span>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<section style="padding: 5rem 2rem 2rem; text-align: center; background: linear-gradient(135deg, rgba(201,168,76,0.05) 0%, rgba(201,168,76,0.02) 100%);">
+  <p class="section-eyebrow">Collection</p>
+  <h1 class="section-title">Our <em>Complete</em> Collection</h1>
+  <p style="font-size: 0.95rem; color: var(--text-light); margin-top: 1rem;">Discover our curated selection of luxury fragrances</p>
+</section>
+
+<!-- SHOP CONTENT -->
+<div class="shop-container">
+  <!-- FILTERS SIDEBAR -->
+  <aside class="filters-sidebar">
+    <input 
+      type="text" 
+      id="searchInput" 
+      class="search-box" 
+      placeholder="Search fragrances..."
+    >
+
+    <div class="filter-group">
+      <h3 class="filter-title">Category</h3>
+      <div class="filter-option">
+        <input type="radio" id="cat-all" name="category" value="" checked>
+        <label for="cat-all">All Fragrances</label>
+      </div>
+      <div class="filter-option">
+        <input type="radio" id="cat-women" name="category" value="Women">
+        <label for="cat-women">Women</label>
+      </div>
+      <div class="filter-option">
+        <input type="radio" id="cat-men" name="category" value="Men">
+        <label for="cat-men">Men</label>
+      </div>
+      <div class="filter-option">
+        <input type="radio" id="cat-unisex" name="category" value="Unisex">
+        <label for="cat-unisex">Unisex</label>
+      </div>
+      <div class="filter-option">
+        <input type="radio" id="cat-oils" name="category" value="Oils">
+        <label for="cat-oils">Oils</label>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <h3 class="filter-title">Price Range</h3>
+      <div class="filter-option">
+        <input type="radio" id="price-all" name="price" value="" checked>
+        <label for="price-all">All Prices</label>
+      </div>
+      <div class="filter-option">
+        <input type="radio" id="price-low" name="price" value="0-10000">
+        <label for="price-low">₦0 - ₦10,000</label>
+      </div>
+      <div class="filter-option">
+        <input type="radio" id="price-mid" name="price" value="10000-20000">
+        <label for="price-mid">₦10,000 - ₦20,000</label>
+      </div>
+      <div class="filter-option">
+        <input type="radio" id="price-high" name="price" value="20000-100000">
+        <label for="price-high">₦20,000+</label>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <h3 class="filter-title">Special</h3>
+      <div class="filter-option">
+        <input type="checkbox" id="filter-new" value="New">
+        <label for="filter-new">New Arrivals</label>
+      </div>
+      <div class="filter-option">
+        <input type="checkbox" id="filter-bestseller" value="Bestseller">
+        <label for="filter-bestseller">Bestsellers</label>
+      </div>
+      <div class="filter-option">
+        <input type="checkbox" id="filter-luxury" value="Luxury">
+        <label for="filter-luxury">Luxury Collection</label>
+      </div>
+    </div>
+
+    <button onclick="resetFilters()" style="width: 100%; padding: 0.8rem; background: transparent; border: 1px solid rgba(201,168,76,0.3); color: var(--gold); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.3s;">
+      Reset Filters
+    </button>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="shop-main">
+    <div class="shop-header">
+      <div class="results-count">
+        Showing <span id="resultsCount">0</span> products
+      </div>
+      <select id="sortSelect" class="sort-select" onchange="applyFilters()">
+        <option value="name">Sort By: Name</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+        <option value="newest">Newest</option>
+      </select>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">RAAH SCENTS ✨</div>
+  <p class="footer-tagline">Luxury Fragrances · Nigeria</p>
+  <p class="footer-contact">📱 WhatsApp: <a href="https://wa.me/2349066444873" target="_blank">+234 906 644 4873</a></p>
+  <p class="footer-contact">📧 Email: <a href="mailto:info@raahscents.com">info@raahscents.com</a></p>
+  <div class="footer-bottom">© 2025 RAAH SCENTS. All rights reserved. · Luxury Perfume Store · Nigeria</div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a class="whatsapp-float" href="https://wa.me/2349066444873" target="_blank" title="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <p style="font-size:0.6rem;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-bottom:0.5rem">Place Your Order</p>
+    <h2 class="modal-perfume-name" id="modalName"></h2>
+    <p class="modal-price" id="modalPrice"></p>
+    <p class="modal-text">You'll be redirected to WhatsApp to complete your order. Your selected perfume details will be pre-filled in the message.</p>
+    <a class="modal-wa-btn" id="modalWhatsApp" href="#" target="_blank">📲 Order via WhatsApp</a>
+    <button class="modal-close" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<script src="js/products-data.js"></script>
+<script src="js/main.js"></script>
+<script>
+  let currentFilters = {
+    search: '',
+    category: '',
+    priceRange: ''
+  };
+
+  const searchInput = document.getElementById('searchInput');
+  const categoryRadios = document.querySelectorAll('input[name="category"]');
+  const priceRadios = document.querySelectorAll('input[name="price"]');
+  const specialCheckboxes = document.querySelectorAll('.filter-group:last-of-type input[type="checkbox"]');
+
+  // Debounced search
+  searchInput.addEventListener('keyup', debounce(applyFilters, 300));
+
+  categoryRadios.forEach(radio => {
+    radio.addEventListener('change', applyFilters);
+  });
+
+  priceRadios.forEach(radio => {
+    radio.addEventListener('change', applyFilters);
+  });
+
+  specialCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', applyFilters);
+  });
+
+  function applyFilters() {
+    currentFilters.search = searchInput.value.toLowerCase();
+    currentFilters.category = document.querySelector('input[name="category"]:checked').value;
+    currentFilters.priceRange = document.querySelector('input[name="price"]:checked').value;
+
+    let filtered = allProducts;
+
+    // Category filter
+    if (currentFilters.category) {
+      filtered = filtered.filter(p => p.category === currentFilters.category);
+    }
+
+    // Price filter
+    if (currentFilters.priceRange) {
+      const [min, max] = currentFilters.priceRange.split('-').map(Number);
+      filtered = filtered.filter(p => {
+        if (max === 100000) return p.price >= min;
+        return p.price >= min && p.price <= max;
+      });
+    }
+
+    // Search filter
+    if (currentFilters.search) {
+      filtered = filtered.filter(p =>
+        p.name.toLowerCase().includes(currentFilters.search) ||
+        p.subcategory.toLowerCase().includes(currentFilters.search) ||
+        p.description.toLowerCase().includes(currentFilters.search)
+      );
+    }
+
+    // Special filters (badges)
+    const newFilter = document.getElementById('filter-new').checked;
+    const bestsellerFilter = document.getElementById('filter-bestseller').checked;
+    const luxuryFilter = document.getElementById('filter-luxury').checked;
+
+    if (newFilter || bestsellerFilter || luxuryFilter) {
+      filtered = filtered.filter(p => {
+        if (newFilter && p.badge === 'New') return true;
+        if (bestsellerFilter && p.badge === 'Bestseller') return true;
+        if (luxuryFilter && p.badge === 'Luxury') return true;
+        return false;
+      });
+    }
+
+    // Sort
+    const sortBy = document.getElementById('sortSelect').value;
+    filtered = sortProducts(filtered, sortBy);
+
+    renderProducts(filtered);
+  }
+
+  function renderProducts(products) {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = '';
+    document.getElementById('resultsCount').textContent = products.length;
+
+    if (products.length === 0) {
+      grid.innerHTML = `
+        <div class="no-results" style="grid-column: 1 / -1;">
+          <div class="no-results-emoji">😔</div>
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--cream);">No Products Found</h3>
+          <p>Try adjusting your filters or search term</p>
+        </div>
+      `;
+      return;
+    }
+
+    products.forEach((p, i) => {
+      const delay = (i % 4) * 0.1;
+      const card = document.createElement('div');
+      card.className = 'product-card reveal';
+      card.style.transitionDelay = delay + 's';
+
+      card.innerHTML = `
+        <div class="product-img-wrap">
+          <div class="product-img-fallback" style="background:${p.gradient}">
+            <span style="font-size:5rem">${p.emoji}</span>
+          </div>
+          ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+          <div class="product-overlay">
+            <button class="buy-btn" onclick="openModal('${p.name}','${formatPrice(p.price)}','${p.ml[0]}')">Quick Order</button>
+          </div>
+        </div>
+        <div class="product-info">
+          <p class="product-category">${p.subcategory}</p>
+          <h3 class="product-name">${p.name}</h3>
+          <p class="product-desc">${p.description}</p>
+          <div class="product-footer">
+            <div class="price-tag">
+              <span class="price-label">Price</span>
+              <span class="price-amount">${formatPrice(p.price)}</span>
+              <span class="price-ml">${p.ml[0]}</span>
+            </div>
+            <button class="buy-btn" onclick="openModal('${p.name}','${formatPrice(p.price)}','${p.ml[0]}')">Buy Now</button>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function resetFilters() {
+    searchInput.value = '';
+    document.getElementById('cat-all').checked = true;
+    document.getElementById('price-all').checked = true;
+    document.getElementById('filter-new').checked = false;
+    document.getElementById('filter-bestseller').checked = false;
+    document.getElementById('filter-luxury').checked = false;
+    document.getElementById('sortSelect').value = 'name';
+    applyFilters();
+  }
+
+  // Initial render
+  applyFilters();
+</script>
+
+</body>
+</html>
