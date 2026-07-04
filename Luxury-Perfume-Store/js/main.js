@@ -1,6 +1,94 @@
 // ========================================
-// RAAH SCENTS - SHARED JAVASCRIPT
+// RAAH SCENTS - UPDATED JAVASCRIPT
+// Mobile & Desktop Detection + Menu Toggle
 // ========================================
+
+// ── DEVICE DETECTION ──
+const DeviceDetect = {
+  isMobile() {
+    return window.innerWidth <= 768;
+  },
+
+  isTablet() {
+    return window.innerWidth > 768 && window.innerWidth <= 1024;
+  },
+
+  isDesktop() {
+    return window.innerWidth > 1024;
+  },
+
+  getDevice() {
+    if (this.isMobile()) return 'mobile';
+    if (this.isTablet()) return 'tablet';
+    return 'desktop';
+  }
+};
+
+// ── MOBILE MENU TOGGLE ──
+let mobileMenuOpen = false;
+
+function initMobileMenu() {
+  const toggle = document.querySelector('.mobile-menu-toggle');
+  const menu = document.querySelector('.nav-menu');
+
+  if (!toggle) return;
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    mobileMenuOpen = !mobileMenuOpen;
+    
+    if (mobileMenuOpen) {
+      menu.classList.add('active');
+      toggle.classList.add('active');
+      toggle.textContent = '✕';
+    } else {
+      menu.classList.remove('active');
+      toggle.classList.remove('active');
+      toggle.textContent = '☰';
+    }
+  });
+
+  // Close menu when clicking a link
+  menu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenuOpen = false;
+      menu.classList.remove('active');
+      toggle.classList.remove('active');
+      toggle.textContent = '☰';
+    });
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+      if (mobileMenuOpen) {
+        mobileMenuOpen = false;
+        menu.classList.remove('active');
+        toggle.classList.remove('active');
+        toggle.textContent = '☰';
+      }
+    }
+  });
+}
+
+// ── RESIZE LISTENER ──
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    // Close mobile menu on resize to desktop
+    if (!DeviceDetect.isMobile() && mobileMenuOpen) {
+      mobileMenuOpen = false;
+      const menu = document.querySelector('.nav-menu');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      if (menu) menu.classList.remove('active');
+      if (toggle) {
+        toggle.classList.remove('active');
+        toggle.textContent = '☰';
+      }
+    }
+  }, 250);
+});
 
 // ── MODAL FUNCTIONALITY ──
 function openModal(name, price, ml = '') {
@@ -21,12 +109,19 @@ function closeModal(e) {
   if (
     !e ||
     e.target === document.getElementById('modalOverlay') ||
-    e.currentTarget.classList.contains('modal-close')
+    (e.currentTarget && e.currentTarget.classList.contains('modal-close'))
   ) {
     document.getElementById('modalOverlay').classList.remove('open');
     document.body.style.overflow = '';
   }
 }
+
+// Close modal on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeModal();
+  }
+});
 
 // ── SCROLL REVEAL ANIMATION ──
 const observer = new IntersectionObserver(
@@ -47,7 +142,10 @@ function createParticles(containerId = 'particles', count = 30) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  for (let i = 0; i < count; i++) {
+  // Reduce particles on mobile
+  const particleCount = DeviceDetect.isMobile() ? count / 2 : count;
+
+  for (let i = 0; i < particleCount; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     p.style.left = Math.random() * 100 + '%';
@@ -63,7 +161,8 @@ function setActiveNavLink() {
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-menu a').forEach((link) => {
     link.classList.remove('active');
-    if (link.getAttribute('href') === currentPage) {
+    const href = link.getAttribute('href');
+    if (href === currentPage || (href === '/' && !currentPage)) {
       link.classList.add('active');
     }
   });
@@ -140,7 +239,7 @@ function renderStars(rating = 0, count = 0) {
     if (i < fullStars) {
       stars += '★';
     } else if (i === fullStars && hasHalfStar) {
-      stars += '☆'; // Half star approximation
+      stars += '☆';
     } else {
       stars += '☆';
     }
@@ -151,13 +250,35 @@ function renderStars(rating = 0, count = 0) {
 
 // ── LOCAL STORAGE HELPERS ──
 const Storage = {
-  set: (key, value) => localStorage.setItem(`raah_${key}`, JSON.stringify(value)),
-  get: (key) => {
-    const item = localStorage.getItem(`raah_${key}`);
-    return item ? JSON.parse(item) : null;
+  set: (key, value) => {
+    try {
+      localStorage.setItem(`raah_${key}`, JSON.stringify(value));
+    } catch (e) {
+      console.log('Storage full or disabled');
+    }
   },
-  remove: (key) => localStorage.removeItem(`raah_${key}`),
-  clear: () => localStorage.clear(),
+  get: (key) => {
+    try {
+      const item = localStorage.getItem(`raah_${key}`);
+      return item ? JSON.parse(item) : null;
+    } catch (e) {
+      return null;
+    }
+  },
+  remove: (key) => {
+    try {
+      localStorage.removeItem(`raah_${key}`);
+    } catch (e) {
+      console.log('Cannot remove from storage');
+    }
+  },
+  clear: () => {
+    try {
+      localStorage.clear();
+    } catch (e) {
+      console.log('Cannot clear storage');
+    }
+  },
 };
 
 // ── CART FUNCTIONALITY ──
@@ -225,25 +346,21 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     const target = document.querySelector(href);
     if (target) {
       e.preventDefault();
+      // Close mobile menu if open
+      if (mobileMenuOpen) {
+        mobileMenuOpen = false;
+        const menu = document.querySelector('.nav-menu');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        if (menu) menu.classList.remove('active');
+        if (toggle) {
+          toggle.classList.remove('active');
+          toggle.textContent = '☰';
+        }
+      }
       target.scrollIntoView({ behavior: 'smooth' });
     }
   });
 });
-
-// ── INITIALIZE ON LOAD ──
-document.addEventListener('DOMContentLoaded', () => {
-  setActiveNavLink();
-});
-
-// ── MOBILE MENU TOGGLE ──
-let mobileMenuOpen = false;
-const toggleMobileMenu = () => {
-  mobileMenuOpen = !mobileMenuOpen;
-  const menu = document.querySelector('.nav-menu');
-  if (menu) {
-    menu.style.display = mobileMenuOpen ? 'flex' : 'none';
-  }
-};
 
 // ── DEBOUNCE HELPER ──
 function debounce(func, wait) {
@@ -269,3 +386,44 @@ function throttle(func, limit) {
     }
   };
 }
+
+// ── PRINT DEVICE INFO (For Debugging) ──
+function debugDeviceInfo() {
+  console.log('Device Info:', {
+    device: DeviceDetect.getDevice(),
+    width: window.innerWidth,
+    height: window.innerHeight,
+    isMobile: DeviceDetect.isMobile(),
+    isTablet: DeviceDetect.isTablet(),
+    isDesktop: DeviceDetect.isDesktop(),
+    userAgent: navigator.userAgent
+  });
+}
+
+// ── INITIALIZE ON LOAD ──
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 RAAH SCENTS Website Loaded');
+  console.log('Device:', DeviceDetect.getDevice());
+  
+  setActiveNavLink();
+  initMobileMenu();
+  
+  // Log device info in console for debugging
+  debugDeviceInfo();
+});
+
+// ── LOG WHEN DEVICE CHANGES ──
+window.addEventListener('orientationchange', () => {
+  console.log('Orientation changed to:', DeviceDetect.getDevice());
+  // Close menu if opened
+  if (mobileMenuOpen) {
+    mobileMenuOpen = false;
+    const menu = document.querySelector('.nav-menu');
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    if (menu) menu.classList.remove('active');
+    if (toggle) {
+      toggle.classList.remove('active');
+      toggle.textContent = '☰';
+    }
+  }
+});
